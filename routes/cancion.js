@@ -4,6 +4,8 @@ const router = Router()
 const CancionSchema = require ('../db/schemas/cancion')
 const tuToken = ''; 
 
+
+// get de canciones con filtro de favoritas
 router.get('', async (req ,res) =>{
     
     const { favorites } = req.query
@@ -20,6 +22,8 @@ router.get('', async (req ,res) =>{
     }
 })
 
+
+// add canciones
 router.post('/add' , async (req,res)=>{
     const { name } = req.body
     const { artist } = req.body
@@ -37,6 +41,8 @@ router.post('/add' , async (req,res)=>{
     }
 })
 
+
+//update de canciones
 router.put('/put/:id' , async (req,res,next) => {
     const { id } = req.params
     const existeCancion = await CancionSchema.findOne({"_id": id})
@@ -60,6 +66,7 @@ router.put('/put/:id' , async (req,res,next) => {
 })
 
 
+// delete de canciones
 router.delete('/delete/:id', async (req,res,next) =>{
     const { id } = req.params
     const existeCancion = await CancionSchema.findOne({"_id": id})
@@ -80,6 +87,8 @@ router.delete('/delete/:id', async (req,res,next) =>{
 
 })
 
+
+//funcion para sacar los top tracks
 async function fecthTopTracks(){
     try{
         const response = await axios.get('https://api.spotify.com/v1/me/top/tracks',{
@@ -98,6 +107,8 @@ async function fecthTopTracks(){
         return { error : error.message}
     }
 }
+
+//get  de los top tracks
 router.get('/top-tracks' , async (res ,req) => {
     const data = await fecthTopTracks();
     res.json(data)
